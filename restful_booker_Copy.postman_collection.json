@@ -1,0 +1,703 @@
+{
+	"info": {
+		"_postman_id": "ca2ed940-a950-43fd-89d5-bbcdf1efdb8e",
+		"name": "restful_booker_Copy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create new booking",
+			"item": [
+				{
+					"name": "Auth - CreateToken",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "15947fd2-53e1-44d7-b572-b6cc356bfa3f",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Set token value\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.environment.set(\"access_token\", jsonData.token);",
+									"});",
+									"",
+									"pm.test(\"Response should contain token\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.token).to.be.a('string');",
+									"    pm.expect(jsonData.token).to.not.be.empty;",
+									"});",
+									"",
+									"pm.test(\"Validate Schema\", () => {",
+									"    // Get the JSON Schema",
+									"    const createToken_JSONSchema = JSON.parse(environment.createToken_JSONSchema);",
+									"    pm.response.to.have.jsonSchema(createToken_JSONSchema);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\" : \"admin\",\n    \"password\" : \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth"
+							]
+						},
+						"description": "Creates a new auth token to use for access to the PUT and DELETE /booking"
+					},
+					"response": []
+				},
+				{
+					"name": "Booking - CreateBooking",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1d53a4c0-1ab8-4ff6-b9a7-29cf6955bb61",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Set booking ID to environment variable\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.environment.set(\"booking_id\", jsonData.bookingid);",
+									"    // console.log(jsonData.bookingid);",
+									"});",
+									"",
+									"pm.test(\"Validate booking detail \", function () {",
+									"    var jsonReqData = JSON.parse(request.data);",
+									"    var jsonResData = pm.response.json();",
+									"    pm.expect(jsonReqData.firstname).to.eql(jsonResData.booking.firstname);",
+									"    pm.expect(jsonReqData.lastname).to.eql(jsonResData.booking.lastname);",
+									"    pm.expect(jsonReqData.totalprice).to.eql(jsonResData.booking.totalprice);",
+									"    pm.expect(jsonReqData.depositpaid).to.eql(jsonResData.booking.depositpaid);",
+									"    pm.expect(jsonReqData.bookingdates.checkin).to.eql(jsonResData.booking.bookingdates.checkin);",
+									"    pm.expect(jsonReqData.bookingdates.checkout).to.eql(jsonResData.booking.bookingdates.checkout);",
+									"    pm.expect(jsonReqData.additionalneeds).to.eql(jsonResData.booking.additionalneeds);",
+									"});",
+									"",
+									"pm.test(\"Validate Schema\", () => {",
+									"    // Get the JSON Schema",
+									"    const createBooking_JSONSchema = JSON.parse(environment.createBooking_JSONSchema);",
+									"    pm.response.to.have.jsonSchema(createBooking_JSONSchema);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstname\" : \"Mansi\",\n    \"lastname\" : \"Shah\",\n    \"totalprice\" : 100,\n    \"depositpaid\" : true,\n    \"bookingdates\" : {\n        \"checkin\" : \"2018-01-01\",\n        \"checkout\" : \"2019-01-01\"\n    },\n    \"additionalneeds\" : \"Breakfast\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/booking",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"booking"
+							]
+						},
+						"description": "Creates a new booking in the API"
+					},
+					"response": []
+				},
+				{
+					"name": "Booking - GetBooking",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "14bbbe99-5260-4b72-9a6a-abde32bd497c",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Validate Schema\", () => {",
+									"    // Get the JSON Schema",
+									"    const getBooking_JSONSchema = JSON.parse(environment.getBooking_JSONSchema);",
+									"    pm.response.to.have.jsonSchema(getBooking_JSONSchema);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{base_url}}/booking/{{booking_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"booking",
+								"{{booking_id}}"
+							]
+						},
+						"description": "Returns a specific booking based upon the booking id provided"
+					},
+					"response": []
+				}
+			],
+			"description": "Creates a new booking in the API\n Reference:\n http://localhost:3001/apidoc/index.html#api-Booking-CreateBooking",
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Update booking",
+			"item": [
+				{
+					"name": "Booking - UpdateBooking",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6d9a8b43-a59a-4fe0-84e2-cf391a9ea8d2",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"// Get the JSON Schema",
+									"const updateBooking_JSONSchema = JSON.parse(environment.updateBooking_JSONSchema);",
+									"",
+									"pm.test(\"Validate Schema\", () => {",
+									"pm.response.to.have.jsonSchema(updateBooking_JSONSchema);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Cookie",
+								"value": "token={{access_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstname\" : \"James\",\n    \"lastname\" : \"Brown\",\n    \"totalprice\" : 111,\n    \"depositpaid\" : true,\n    \"bookingdates\" : {\n        \"checkin\" : \"2018-01-01\",\n        \"checkout\" : \"2019-01-01\"\n    },\n    \"additionalneeds\" : \"Breakfast\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/booking/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"booking",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{booking_id}}"
+								}
+							]
+						},
+						"description": "Updates a current booking\n\n"
+					},
+					"response": []
+				},
+				{
+					"name": "Booking - GetBooking",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "92939064-ec57-464a-95eb-1d26bf99158d",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Validate Schema\", () => {",
+									"    // Get the JSON Schema",
+									"    const getBooking_JSONSchema = JSON.parse(environment.getBooking_JSONSchema);",
+									"    pm.response.to.have.jsonSchema(getBooking_JSONSchema);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{base_url}}/booking/{{booking_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"booking",
+								"{{booking_id}}"
+							]
+						},
+						"description": "Returns a specific booking based upon the booking id provided"
+					},
+					"response": []
+				}
+			],
+			"description": "Updates a current booking\n Reference:\n http://localhost:3001/apidoc/index.html#api-Booking-UpdateBooking",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "fe33974c-fafe-45e7-b2c3-a97b46ca5126",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "5482ef97-4d14-4403-ba66-2530517a710b",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Update partial booking",
+			"item": [
+				{
+					"name": "Booking - PartialUpdateBooking",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f4ab732d-280a-40d8-bfbb-a6e7cf9b255d",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Get the JSON Schema",
+									"const partialUpdateBooking_JSONSchema = JSON.parse(environment.partialUpdateBooking_JSONSchema);",
+									"",
+									"pm.test(\"Validate Schema\", () => {",
+									"pm.response.to.have.jsonSchema(partialUpdateBooking_JSONSchema);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "token={{access_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstname\" : \"James\",\n    \"lastname\" : \"Smith\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/booking/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"booking",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{booking_id}}"
+								}
+							]
+						},
+						"description": "Updates a current booking with a partial payload"
+					},
+					"response": []
+				},
+				{
+					"name": "Booking - GetBooking",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "9ccb659b-7784-4d6d-99ba-2b53d6ff6fcb",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Validate Schema\", () => {",
+									"    // Get the JSON Schema",
+									"    const getBooking_JSONSchema = JSON.parse(environment.getBooking_JSONSchema);",
+									"    pm.response.to.have.jsonSchema(getBooking_JSONSchema);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{base_url}}/booking/{{booking_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"booking",
+								"{{booking_id}}"
+							]
+						},
+						"description": "Returns a specific booking based upon the booking id provided"
+					},
+					"response": []
+				}
+			],
+			"description": "Updates a current booking with a partial payload\n Reference:\n http://localhost:3001/apidoc/index.html#api-Booking-PartialUpdateBooking",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "2c278c7a-1d37-4171-8b63-2fe7844100de",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "a0b4c6eb-1087-4645-b52f-3384033b21c7",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Get all booking Ids",
+			"item": [
+				{
+					"name": "Booking - GetBookingIds",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ea5d0c17-9472-4850-bf12-67906fe1e641",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// pm.test(\"Validate Schema\", () => {",
+									"//     // Get the JSON Schema",
+									"//     const getBookingID_JSONSchema = JSON.parse(environment.getBookingID_JSONSchema);",
+									"//     pm.response.to.have.jsonSchema(getBookingID_JSONSchema);",
+									"// });",
+									"",
+									"pm.test(\"Response should contain at least one bookingid\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData[0].bookingid).to.not.be.null;",
+									"    pm.expect(jsonData[0].bookingid).to.be.a('number');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/booking",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"booking"
+							],
+							"query": [
+								{
+									"key": "firstname",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "lastname",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "checkin",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "checkout",
+									"value": "",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Returns the ids of all the bookings that exist within the API. Can take optional query strings to search and return a subset of booking ids."
+					},
+					"response": []
+				}
+			],
+			"description": "Returns the ids of all the bookings that exist within the API. Can take optional query strings to search and return a subset of booking ids.\n Reference:\n http://localhost:3001/apidoc/index.html#api-Booking-GetBookings",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "25ce5db1-48c9-4871-91a9-271adf5e937c",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "e994dc70-50a4-415e-9a67-6419dfcdf1ce",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Delete booking",
+			"item": [
+				{
+					"name": "Booking - DeleteBooking",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a2e5bc0d-f1a8-4423-a946-f26bbc28258b",
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "token={{access_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/booking/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"booking",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{booking_id}}"
+								}
+							]
+						},
+						"description": "Returns the ids of all the bookings that exist within the API. Can take optional query strings to search and return a subset of booking ids.\n\n"
+					},
+					"response": []
+				},
+				{
+					"name": "Booking - GetBooking",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0fab3fb6-fc91-4e43-b511-913bab6308e1",
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{base_url}}/booking/{{booking_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"booking",
+								"{{booking_id}}"
+							]
+						},
+						"description": "Returns a specific booking based upon the booking id provided"
+					},
+					"response": []
+				}
+			],
+			"description": "Delete a current booking\n Reference:\n http://localhost:3001/apidoc/index.html#api-Booking-DeleteBooking",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "eca4c060-54cc-427f-a2d0-1bcd9770ca32",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "e85e3acd-5b86-4dbc-a0f6-7fd919ceb5c2",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
