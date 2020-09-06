@@ -2,11 +2,11 @@ version: '3.6'
 
 services:
   restful-booker:
-    image: ankurpshah/restful-booker
+    image: mansi2303/restful-booker
     ports:
       - "3001:3001"
   test-restful-booker-extra:
-    image: ankurpshah/newman-with-htmlextra
+    image: mansi2303/newman-with-htmlextra
     tty: true
     volumes:
       - ${PWD}/collection:/etc/postman
