@@ -1,0 +1,9 @@
+[{
+    "firstname": "Akbar",
+    "lastname": "Khan",
+    "totalprice": 111,
+    "depositpaid": true,
+    "checkin": "2021-12-28",
+    "checkout": "2021-12-31",
+    "additionalneeds": "Breakfast"
+}]
