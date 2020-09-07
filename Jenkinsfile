@@ -8,7 +8,7 @@ pipeline {
   stages {
     stage('Test') {
       steps {
-        sh 'newman run collection/restful_booker_Copy.postman_collection.json --environment env/Test.postman_environment.json --reporters htmlextra,junit --reporter-htmlextra-export report/html/smoke.html --reporter-htmlextra-title "Smoke Test" --reporter-junit-export report/junit/smoke-report.xml'
+        sh 'newman run collection/restful_booker.postman_collection.json --environment env/Test.postman_environment.json --reporters htmlextra,junit --reporter-htmlextra-export report/html/smoke.html --reporter-htmlextra-title "Smoke Test" --reporter-junit-export report/junit/smoke-report.xml'
       }
     }
   }
