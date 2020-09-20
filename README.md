@@ -73,7 +73,7 @@ newman run collection/smoke.postman_collection.json -e env/local.postman_environ
    * Review the script to see the specific options that I've used.
 
 ## Run a collection with a newman container
-Run using below command
+To run using docker image use below command
 ```
 docker run --rm -v ${PWD}:/etc/postman \
     -t postman/newman run \
@@ -81,3 +81,8 @@ docker run --rm -v ${PWD}:/etc/postman \
     --environment=/etc/postman/Test.postman_environment.json \
     --reporters junit --reporter-junit-export="/etc/postman/dockerReport/apireport.xml"
 ```    
+To run in local use 
+```
+newman run collection/restful_booker_Copy.postman_collection.json --environment env/Test.postman_environment.json --reporters htmlextra,junit --reporter-htmlextra-export report/html/smoke.html --reporter-htmlextra-title "Smoke Test" --reporter-junit-export report/junit/smoke-report.xml
+
+```
